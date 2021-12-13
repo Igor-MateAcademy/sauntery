@@ -1,3 +1,5 @@
+**SSH key was added
+
 Run the XCode simulation before enter the next command:
 
 npx react-native start
