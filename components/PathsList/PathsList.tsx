@@ -1,9 +1,17 @@
-import React from 'react';
-import {Text} from 'native-base';
-import {FormData} from '../types/FormData';
+import React, {useContext} from 'react';
+import {observer} from 'mobx-react-lite';
+import {Text, Box} from 'native-base';
+// import {Path} from '../../types/Path';
+import {ObservablePaths} from '../../ObservablePaths';
 
-export const PathsList = ({route}: any) => {
-  const {paths} = route.params;
+export const PathsList = observer(() => {
+  const observablePaths = useContext(ObservablePaths);
 
-  return paths.map((path: FormData) => <Text>{path.title}</Text>);
-};
+  return (
+    <Box>
+      {observablePaths.paths.map(path => {
+        <Text>{path.title}</Text>;
+      })}
+    </Box>
+  );
+});

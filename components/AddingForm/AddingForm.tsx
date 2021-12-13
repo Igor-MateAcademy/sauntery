@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {StyleSheet} from 'react-native';
 import {
   FormControl,
@@ -10,26 +10,29 @@ import {
   Alert,
   HStack,
 } from 'native-base';
-import {FormData} from '../types/FormData';
+import {FormData} from '../../types/FormData';
+// import {observer} from 'mobx-react-lite';
+import {ObservablePaths} from '../../ObservablePaths';
 
 export const AddingForm = ({navigation}: any) => {
-  const [paths, setPaths] = useState<FormData[]>([]);
+  const observablePaths = useContext(ObservablePaths);
   const [formData, setFormData] = useState<FormData>({
     title: '',
     shortDescription: '',
     fullDescription: '',
   });
 
-  const goHome = () => navigation.navigate('Home');
+  const goHome = () => {
+    navigation.navigate('Home');
+  };
 
-  const goToPathsList = () => navigation.navigate('List', {...paths});
+  const goToPathsList = () => {
+    navigation.navigate('List');
+  };
 
   const submitForm = () => {
     if (validateData()) {
-      setPaths({
-        ...paths,
-        ...formData,
-      });
+      observablePaths.addPath(formData);
       goToPathsList();
     }
   };

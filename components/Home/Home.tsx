@@ -3,8 +3,13 @@ import {Heading, Box, Button, Flex, Divider, Text} from 'native-base';
 import {StyleSheet} from 'react-native';
 
 export const Home = ({navigation}: any) => {
-  const navigateToForm = () => navigation.navigate('Form');
-  const navigateToPathsList = () => navigation.navigate('List');
+  const navigateToForm = () => {
+    navigation.navigate('Form');
+  };
+
+  const navigateToPathsList = () => {
+    navigation.navigate('List');
+  };
 
   return (
     <Box style={styles.page}>
