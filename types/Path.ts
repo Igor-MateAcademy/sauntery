@@ -1,6 +1,7 @@
 export interface Path {
-  // id: number;
+  id: string | Uint8Array;
   title: string;
   shortDescription: string;
   fullDescription: string;
+  isFavorite: boolean;
 }

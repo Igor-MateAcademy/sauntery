@@ -1,4 +1,5 @@
 import React, {useState, useContext} from 'react';
+import uuid from 'react-native-uuid';
 import {StyleSheet} from 'react-native';
 import {
   FormControl,
@@ -32,7 +33,11 @@ export const AddingForm = observer(({navigation}: any) => {
 
   const submitForm = () => {
     if (validateData()) {
-      observablePaths.addPath(formData);
+      observablePaths.addPath({
+        ...formData,
+        id: uuid.v1(),
+        isFavorite: false,
+      });
       goToPathsList();
     }
 
