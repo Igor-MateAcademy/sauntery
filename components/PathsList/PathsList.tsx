@@ -9,6 +9,7 @@ export const PathsList = observer(() => {
 
   return (
     <Box>
+      <Text>List</Text>
       {observablePaths.paths.map(path => {
         <Text>{path.title}</Text>;
       })}

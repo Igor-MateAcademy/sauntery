@@ -16,5 +16,6 @@ export class Paths {
 
   addPath(path: Path): void {
     this.paths.push({...path});
+    console.log(this.paths);
   }
 }

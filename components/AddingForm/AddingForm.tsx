@@ -11,10 +11,10 @@ import {
   HStack,
 } from 'native-base';
 import {FormData} from '../../types/FormData';
-// import {observer} from 'mobx-react-lite';
 import {ObservablePaths} from '../../ObservablePaths';
+import {observer} from 'mobx-react-lite';
 
-export const AddingForm = ({navigation}: any) => {
+export const AddingForm = observer(({navigation}: any) => {
   const observablePaths = useContext(ObservablePaths);
   const [formData, setFormData] = useState<FormData>({
     title: '',
@@ -167,7 +167,7 @@ export const AddingForm = ({navigation}: any) => {
       </Flex>
     </FormControl>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
