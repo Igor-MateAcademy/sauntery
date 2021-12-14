@@ -35,6 +35,12 @@ export const AddingForm = observer(({navigation}: any) => {
       observablePaths.addPath(formData);
       goToPathsList();
     }
+
+    setFormData({
+      title: '',
+      shortDescription: '',
+      fullDescription: '',
+    });
   };
 
   const titleHandler = (value: string) => {
@@ -83,6 +89,8 @@ export const AddingForm = observer(({navigation}: any) => {
             type="text"
             placeholder="Enter a path title..."
             onChangeText={titleHandler}
+            value={formData.title}
+            variant="underlined"
           />
           {!isTitleValid() ? (
             <Alert status="warning" variant="outline">
@@ -105,7 +113,11 @@ export const AddingForm = observer(({navigation}: any) => {
           <FormControl.Label>
             <Text style={styles.form__title}>Short description</Text>
           </FormControl.Label>
-          <TextArea type="text" onChangeText={shortDescriptionHandler} />
+          <TextArea
+            type="text"
+            onChangeText={shortDescriptionHandler}
+            value={formData.shortDescription}
+          />
           <FormControl.HelperText>
             {`Limit ${formData.shortDescription.length} of 160`}
           </FormControl.HelperText>
@@ -135,6 +147,7 @@ export const AddingForm = observer(({navigation}: any) => {
             type="text"
             style={styles.form__textarea}
             onChangeText={fullDescriptionHandler}
+            value={formData.fullDescription}
           />
           {isFullDescriptionValid() ? (
             <Alert status="success" variant="outline">
@@ -187,7 +200,7 @@ const styles = StyleSheet.create({
   },
 
   form__input: {
-    height: 50,
+    height: 30,
     marginBottom: 12,
   },
 

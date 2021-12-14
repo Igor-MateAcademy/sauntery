@@ -1,18 +1,17 @@
 import React, {useContext} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Text, Box} from 'native-base';
-// import {Path} from '../../types/Path';
+import {FlatList} from 'native-base';
 import {ObservablePaths} from '../../ObservablePaths';
+import {RenderingPath} from '../RenderingPath/RenderingPath';
 
 export const PathsList = observer(() => {
   const observablePaths = useContext(ObservablePaths);
 
   return (
-    <Box>
-      <Text>List</Text>
-      {observablePaths.paths.map(path => {
-        <Text>{path.title}</Text>;
-      })}
-    </Box>
+    <FlatList
+      data={observablePaths.paths}
+      renderItem={({item}: any) => <RenderingPath path={item} />}
+      keyExtractor={() => String(Math.random())}
+    />
   );
 });

@@ -2,20 +2,13 @@ import {makeAutoObservable} from 'mobx';
 import {Path} from '../types/Path';
 
 export class Paths {
-  paths: Path[] = [
-    {
-      title: 'test',
-      shortDescription: 'test',
-      fullDescription: 'test',
-    },
-  ];
+  paths: Path[] = [];
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  addPath(path: Path): void {
+  addPath = (path: Path): void => {
     this.paths.push({...path});
-    console.log(this.paths);
-  }
+  };
 }
