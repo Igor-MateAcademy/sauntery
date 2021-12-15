@@ -2247,7 +2247,15 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-native@^0.66.4":
+"@types/react-native-vector-icons@^6.4.10":
+  "integrity" "sha512-z4sexbuZ7nmYsp7Z9YB5fSQoN3KFn6nZA3QsCkQLOYnVmVlxX4U22v/bM9Xx/6dOA1vClxoRZo2CFDX16uryXQ=="
+  "resolved" "https://registry.npmjs.org/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.10.tgz"
+  "version" "6.4.10"
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
+"@types/react-native@*", "@types/react-native@^0.66.4":
   "integrity" "sha512-xiW7MfTPzd6xsJB8VEtheF9RH1Vyr1FlbM5jguMa+3ZtnFlE38H4TZSCFAaA3YGIZDnAOlG7qT13RUWyFpW2uw=="
   "resolved" "https://registry.npmjs.org/@types/react-native/-/react-native-0.66.8.tgz"
   "version" "0.66.8"
@@ -5502,7 +5510,7 @@
   "resolved" "https://registry.npmjs.org/lodash.truncate/-/lodash.truncate-4.4.2.tgz"
   "version" "4.4.2"
 
-"lodash@^4.17.10", "lodash@^4.17.14", "lodash@^4.17.15", "lodash@^4.7.0":
+"lodash@^4.17.10", "lodash@^4.17.14", "lodash@^4.17.15", "lodash@^4.17.21", "lodash@^4.7.0":
   "integrity" "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
   "resolved" "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   "version" "4.17.21"

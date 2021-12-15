@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {makeAutoObservable} from 'mobx';
 import {Path} from '../types/Path';
 
@@ -15,11 +16,17 @@ export class Paths {
   deletePath = (id: string | Uint8Array): void => {
     this.paths = this.paths.filter(path => id != path.id);
   };
-  // rewrite this method
+
   sortByFavorite = (id: string | Uint8Array) => {
+    const pathsWithoutFavorite = this.paths.filter(path => id !== path.id);
     const favoritePath = this.paths.find(path => path.id === id);
-    console.log(favoritePath);
-    debugger;
-    this.paths.sort((a: any, b: any) => a.isFavorite - b.isFavorite);
+    const deepClone = _.cloneDeep(favoritePath);
+
+    if (deepClone) {
+      deepClone.isFavorite = !deepClone.isFavorite;
+      pathsWithoutFavorite.push(deepClone);
+      this.paths = pathsWithoutFavorite;
+      this.paths.sort((a: any, b: any) => b.isFavorite - a.isFavorite);
+    }
   };
 }

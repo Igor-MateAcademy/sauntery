@@ -5,16 +5,15 @@ import {
   Text,
   Flex,
   IconButton,
-  CloseIcon,
-  InfoIcon,
-  MoonIcon,
   Modal,
   Divider,
 } from 'native-base';
 import {StyleSheet} from 'react-native';
 import {ObservablePaths} from '../../ObservablePaths';
+import {observer} from 'mobx-react-lite';
+import Icon from 'react-native-vector-icons/Entypo';
 
-export const RenderingPath: React.FC<any> = ({path}) => {
+export const RenderingPath: React.FC<any> = observer(({path}) => {
   const observablePaths = useContext(ObservablePaths);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -33,18 +32,30 @@ export const RenderingPath: React.FC<any> = ({path}) => {
   return (
     <Flex style={styles.path}>
       <Flex style={styles.path__info}>
-        <Heading>
-          {path.title}
-          {path.isFavorite ? 'Favirote' : 'No'}
-        </Heading>
+        <Heading>{path.title}</Heading>
         <Text style={styles.path__description} isTruncated maxWidth="90%">
           {path.shortDescription}
         </Text>
       </Flex>
       <Box>
-        <IconButton icon={<CloseIcon size="3" />} onPress={deleteFromList} />
-        <IconButton icon={<MoonIcon size="3" />} onPress={setAsFavorite} />
-        <IconButton icon={<InfoIcon size="3" />} onPress={getPathInfo} />
+        <IconButton
+          icon={<Icon name="squared-cross" size={20} color="#919191" />}
+          onPress={deleteFromList}
+        />
+        <IconButton
+          icon={
+            path.isFavorite ? (
+              <Icon name="heart" size={20} color="#ff0f60" />
+            ) : (
+              <Icon name="heart-outlined" size={20} color="#ff0f60" />
+            )
+          }
+          onPress={setAsFavorite}
+        />
+        <IconButton
+          icon={<Icon name="info" size={20} color="#ffd966" />}
+          onPress={getPathInfo}
+        />
         <Modal
           isOpen={isModalVisible}
           onClose={() => {
@@ -54,18 +65,22 @@ export const RenderingPath: React.FC<any> = ({path}) => {
             <Modal.CloseButton />
             <Modal.Header>{path.title}</Modal.Header>
             <Modal.Body>
-              <Heading>Short description</Heading>
-              <Text>{path.shortDescription}</Text>
+              <Heading style={styles.modal__header}>Short description</Heading>
+              <Text style={styles.path__description}>
+                {path.shortDescription}
+              </Text>
               <Divider style={styles.modal__divider} />
-              <Heading>Full description</Heading>
-              <Text>{path.fullDescription}</Text>
+              <Heading style={styles.modal__header}>Full description</Heading>
+              <Text style={styles.path__description}>
+                {path.fullDescription}
+              </Text>
             </Modal.Body>
           </Modal.Content>
         </Modal>
       </Box>
     </Flex>
   );
-};
+});
 
 const styles = StyleSheet.create({
   path: {
@@ -90,5 +105,9 @@ const styles = StyleSheet.create({
 
   modal__divider: {
     marginVertical: 12,
+  },
+
+  modal__header: {
+    marginBottom: 8,
   },
 });
