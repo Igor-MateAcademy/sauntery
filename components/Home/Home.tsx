@@ -1,6 +1,7 @@
 import React from 'react';
 import {Heading, Box, Button, Flex, Divider, Text} from 'native-base';
 import {StyleSheet} from 'react-native';
+import MapView from 'react-native-maps';
 
 export const Home = ({navigation}: any) => {
   const navigateToForm = () => {
@@ -25,16 +26,24 @@ export const Home = ({navigation}: any) => {
       </Flex>
       <Divider style={styles.divider} />
       <Heading style={styles.page__title}>Map</Heading>
+      <Box style={styles.map__container}>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      </Box>
     </Box>
-
-    // implement google map
   );
 };
 
 const styles = StyleSheet.create({
   page: {
-    paddingVertical: 20,
-    paddingHorizontal: 20,
+    padding: 20,
   },
 
   page__title: {
@@ -65,5 +74,18 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginBottom: 16,
     backgroundColor: '#1e9bf9',
+  },
+
+  map__container: {
+    height: '75%',
+    backgroundColor: 'yellow',
+    overflow: 'hidden',
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+  },
+
+  map: {
+    display: 'flex',
+    flexGrow: 1,
   },
 });

@@ -19,7 +19,7 @@ Check:
 - https://github.com/vitalets/react-native-extended-stylesheet (Stylesheet library)
 - https://github.com/jhen0409/react-native-debugger (React Native Debugger)
 
-Libraries list:
+Maps:
 
-- native-base (additional react components for react-native library)
-- react-hook-form (library for input form)
+- https://github.com/react-native-maps/react-native-maps/blob/master/README.md
+- https://www.npmjs.com/package/react-native-maps-directions
