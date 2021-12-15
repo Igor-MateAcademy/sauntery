@@ -27,10 +27,6 @@ export const AddingForm = observer(({navigation}: any) => {
     navigation.navigate('Home');
   };
 
-  const goToPathsList = () => {
-    navigation.navigate('List');
-  };
-
   const submitForm = () => {
     if (validateData()) {
       observablePaths.addPath({
@@ -38,7 +34,7 @@ export const AddingForm = observer(({navigation}: any) => {
         id: uuid.v1(),
         isFavorite: false,
       });
-      goToPathsList();
+      goHome();
     }
 
     setFormData({

@@ -11,7 +11,7 @@ export const PathsList = observer(() => {
     <FlatList
       data={observablePaths.paths}
       renderItem={({item}: any) => <RenderingPath path={item} />}
-      keyExtractor={() => String(Math.random())}
+      keyExtractor={item => item.id}
     />
   );
 });

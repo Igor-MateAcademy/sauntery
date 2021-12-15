@@ -2,6 +2,5 @@
 import React from 'react';
 import {Paths} from './stores/paths';
 
-const paths = new Paths();
-
+export const paths = new Paths();
 export const ObservablePaths = React.createContext(paths);
