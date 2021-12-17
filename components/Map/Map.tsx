@@ -8,6 +8,9 @@ import {observer} from 'mobx-react-lite';
 import {ObservableMarkers} from '../../ObservablePaths';
 import uuid from 'react-native-uuid';
 import Icon from 'react-native-vector-icons/Entypo';
+import MapViewDirections from 'react-native-maps-directions';
+
+const apikey = 'AIzaSyBtTK6KMu2bzUP3l80MhMdkPmsQF_6Zg7M';
 
 export const Map = observer(() => {
   const marker = useContext(ObservableMarkers);
@@ -27,6 +30,8 @@ export const Map = observer(() => {
     latitudeDelta: 0.002,
     longitudeDelta: 0.002,
   });
+
+  const [isDirection, setIsDirection] = useState(false);
 
   const options = {
     enableHighAccuracy: true,
@@ -105,6 +110,35 @@ export const Map = observer(() => {
 
   const clearAllMarkers = (): void => {
     marker.deleteAllMarkers();
+    setIsDirection(false);
+  };
+
+  const getFirstWaypoint = () => {
+    const waypoint = marker.getMarkers()[0];
+    console.log('first', waypoint);
+
+    return waypoint.coordinate;
+  };
+
+  const getLastWaypoint = () => {
+    const waypoint = marker.getMarkers()[marker.getMarkers().length - 1];
+
+    return waypoint.coordinate;
+  };
+
+  const handleRenderingDirection = () => {
+    setIsDirection(!isDirection);
+  };
+
+  const getWaypoints = () => {
+    const markers = marker.getMarkers();
+    const slicedMarkers = markers.slice(1, -1);
+
+    if (markers.length < 1) {
+      return undefined;
+    }
+
+    return slicedMarkers.map(way => way.coordinate);
   };
 
   return (
@@ -121,12 +155,28 @@ export const Map = observer(() => {
         {marker.markers.map(currMarker => (
           <Marker coordinate={{...currMarker.coordinate}} key={currMarker.id} />
         ))}
+        {isDirection && (
+          <MapViewDirections
+            origin={getFirstWaypoint()}
+            waypoints={getWaypoints()}
+            destination={getLastWaypoint()}
+            apikey={apikey}
+            strokeWidth={3}
+            strokeColor="hotpink"
+            mode="WALKING"
+          />
+        )}
       </MapView>
-      <IconButton
-        icon={<Icon name="man" size={30} color="#1e9bf9" />}
-        style={styles.man}
-        onPress={moveToGeolocation}
-      />
+      <Flex style={styles.man}>
+        <IconButton
+          icon={<Icon name="direction" size={30} color="#1e9bf9" />}
+          onPress={handleRenderingDirection}
+        />
+        <IconButton
+          icon={<Icon name="man" size={30} color="#1e9bf9" />}
+          onPress={moveToGeolocation}
+        />
+      </Flex>
       <Flex style={styles.zoom}>
         <IconButton
           icon={<Icon name="circle-with-plus" size={30} color="#1e9bf9" />}
