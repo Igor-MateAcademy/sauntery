@@ -1,4 +1,4 @@
-import {makeAutoObservable, toJS} from 'mobx';
+import {makeAutoObservable} from 'mobx';
 
 type LatLng = {
   latitude: Number;
@@ -18,9 +18,17 @@ export class Markers {
   }
 
   addMarker = (marker: Marker): void => {
-    console.log('marker', marker);
     this.markers.push(marker);
-    console.log('markers', toJS(this.markers));
+  };
+
+  isMarkersCountValid = () => {
+    const count = this.markers.length;
+
+    return count > 1 && count <= 10;
+  };
+
+  deleteAllMarkers = (): void => {
+    this.markers = [];
   };
 
   getMarkers = () => this.markers;

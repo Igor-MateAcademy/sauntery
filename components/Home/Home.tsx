@@ -1,11 +1,26 @@
-import React from 'react';
-import {Heading, Box, Button, Flex, Divider, Text} from 'native-base';
+import React, {useContext} from 'react';
+import {
+  Heading,
+  Box,
+  Button,
+  Flex,
+  Divider,
+  Text,
+  Alert,
+  HStack,
+} from 'native-base';
 import {StyleSheet} from 'react-native';
 import {Map} from '../Map/Map';
+import {ObservableMarkers} from '../../ObservablePaths';
+import {observer} from 'mobx-react-lite';
 
-export const Home = ({navigation}: any) => {
+export const Home = observer(({navigation}: any) => {
+  const marker = useContext(ObservableMarkers);
+
   const navigateToForm = () => {
-    navigation.navigate('Form');
+    if (marker.isMarkersCountValid()) {
+      navigation.navigate('Form');
+    }
   };
 
   const navigateToPathsList = () => {
@@ -25,11 +40,27 @@ export const Home = ({navigation}: any) => {
         </Button>
       </Flex>
       <Divider style={styles.divider} />
-      <Heading style={styles.page__title}>Map</Heading>
+      {!marker.isMarkersCountValid() ? (
+        <Alert status="info" variant="outline" style={styles.alert}>
+          <HStack space={3} alignItems="center">
+            <Alert.Icon />
+            <Text style={styles.alert__text}>
+              Select as minimum 2 waypoints, but less than 10
+            </Text>
+          </HStack>
+        </Alert>
+      ) : (
+        <Alert status="success" variant="outline" style={styles.alert}>
+          <HStack space={3} alignItems="center">
+            <Alert.Icon />
+            <Text style={styles.alert__text}>You can add path now!</Text>
+          </HStack>
+        </Alert>
+      )}
       <Map />
     </Box>
   );
-};
+});
 
 const styles = StyleSheet.create({
   page: {
@@ -64,5 +95,13 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginBottom: 16,
     backgroundColor: '#1e9bf9',
+  },
+
+  alert: {
+    marginBottom: 12,
+  },
+
+  alert__text: {
+    textAlign: 'center',
   },
 });

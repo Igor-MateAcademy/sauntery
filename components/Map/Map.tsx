@@ -3,7 +3,7 @@ import React, {useState, useEffect, useContext, useRef} from 'react';
 import MapView, {Marker} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import {StyleSheet} from 'react-native';
-import {Box, IconButton} from 'native-base';
+import {Box, IconButton, Flex} from 'native-base';
 import {observer} from 'mobx-react-lite';
 import {ObservableMarkers} from '../../ObservablePaths';
 import uuid from 'react-native-uuid';
@@ -12,12 +12,20 @@ import Icon from 'react-native-vector-icons/Entypo';
 export const Map = observer(() => {
   const marker = useContext(ObservableMarkers);
   const map = useRef<MapView>();
+
   const [currentPosition, setCurrentPosition] = useState({
     latitude: 0,
     longitude: 0,
     latitudeDelta: 0.002,
     longitudeDelta: 0.002,
     error: '',
+  });
+
+  const [region, setRegion] = useState({
+    latitude: 0,
+    longitude: 0,
+    latitudeDelta: 0.002,
+    longitudeDelta: 0.002,
   });
 
   const options = {
@@ -27,10 +35,18 @@ export const Map = observer(() => {
   };
 
   const success = (position: any) => {
+    const {latitude, longitude} = position.coords;
+
     setCurrentPosition({
       ...currentPosition,
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
+      latitude: latitude,
+      longitude: longitude,
+    });
+
+    setRegion({
+      ...region,
+      latitude: latitude,
+      longitude: longitude,
     });
   };
 
@@ -61,7 +77,6 @@ export const Map = observer(() => {
   };
 
   const moveToGeolocation = () => {
-    Geolocation.getCurrentPosition(success, error, options);
     map.current?.animateCamera(
       {
         center: {...currentPosition},
@@ -72,18 +87,36 @@ export const Map = observer(() => {
     );
   };
 
-  // implement this function
-  const handleRegionChange = () => {};
+  const handleRegionChange = (coords: any) => {
+    const {latitude, longitude, longitudeDelta, latitudeDelta} = coords;
+
+    setRegion({
+      ...region,
+      latitude: latitude,
+      longitude: longitude,
+      longitudeDelta: longitudeDelta,
+      latitudeDelta: latitudeDelta,
+    });
+  };
+
+  // implement zooming function
+  // eslint-disable-next-line
+  const zooming = (option: string): void => {};
+
+  const clearAllMarkers = (): void => {
+    marker.deleteAllMarkers();
+  };
 
   return (
     <Box style={styles.map__container}>
+      {console.log('Map was re-rendered')}
       <MapView
         ref={(ref: any) => {
           map.current = ref;
         }}
         style={styles.map}
-        region={currentPosition}
-        onRegionChange={handleRegionChange}
+        region={region}
+        onRegionChangeComplete={handleRegionChange}
         onPress={handleTouch}>
         {marker.markers.map(currMarker => (
           <Marker coordinate={{...currMarker.coordinate}} key={currMarker.id} />
@@ -94,6 +127,20 @@ export const Map = observer(() => {
         style={styles.man}
         onPress={moveToGeolocation}
       />
+      <Flex style={styles.zoom}>
+        <IconButton
+          icon={<Icon name="circle-with-plus" size={30} color="#1e9bf9" />}
+          // onPress={zooming('increase')}
+        />
+        <IconButton
+          icon={<Icon name="circle-with-minus" size={30} color="#1e9bf9" />}
+          // onPress={zooming('decrease')}
+        />
+        <IconButton
+          icon={<Icon name="trash" size={30} color="#1e9bf9" />}
+          onPress={clearAllMarkers}
+        />
+      </Flex>
     </Box>
   );
 });
@@ -101,7 +148,7 @@ export const Map = observer(() => {
 const styles = StyleSheet.create({
   map__container: {
     position: 'relative',
-    height: '75%',
+    height: '72%',
     backgroundColor: 'yellow',
     overflow: 'hidden',
     borderTopLeftRadius: 4,
@@ -125,5 +172,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '50%',
     left: '50%',
+  },
+
+  zoom: {
+    position: 'absolute',
   },
 });
