@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext } from 'react';
-import MapView, { Marker } from 'react-native-maps';
+import React, {useState, useEffect, useContext} from 'react';
+import MapView, {Marker} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
-import { StyleSheet } from 'react-native';
-import { Box } from 'native-base';
-import { observer } from 'mobx-react-lite';
-import { ObservableMarkers } from '../../ObservablePaths';
+import {StyleSheet} from 'react-native';
+import {Box} from 'native-base';
+import {observer} from 'mobx-react-lite';
+import {ObservableMarkers} from '../../ObservablePaths';
 import uuid from 'react-native-uuid';
 
 export const Map = observer(() => {
@@ -44,7 +44,8 @@ export const Map = observer(() => {
   }, []);
 
   const handleTouch = (event: any) => {
-    const { latitude, longitude } = event.nativeEvent.coordinate;
+    const {latitude, longitude} = event.nativeEvent.coordinate;
+    console.log(event.nativeEvent.coordinate);
     const newMarker = {
       id: uuid.v1(),
       coordinate: {
@@ -64,9 +65,9 @@ export const Map = observer(() => {
         style={styles.map}
         region={currentPosition}
         onPress={handleTouch}>
-        {/* {marker.markers.map(currMarker => (
-          <Marker coordinate={currMarker.coordinate} key={currMarker.id} />
-        ))} */}
+        {marker?.markers?.map(currMarker => (
+          <Marker coordinate={{...currMarker.coordinate}} key={currMarker.id} />
+        ))}
       </MapView>
     </Box>
   );
