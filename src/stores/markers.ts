@@ -1,24 +1,13 @@
 import {makeAutoObservable} from 'mobx';
-
-type LatLng = {
-  latitude: Number;
-  longitude: Number;
-};
-
-type Marker = {
-  id: String | Uint8Array;
-  coordinate: LatLng;
-};
-
+import {Waypoint} from '../types/Waypoint';
 export class Markers {
-  markers: any[] = [];
-  geolocation: any = {};
+  markers: Waypoint[] = [];
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  addMarker = (marker: Marker): void => {
+  addMarker = (marker: Waypoint): void => {
     this.markers.push(marker);
   };
 

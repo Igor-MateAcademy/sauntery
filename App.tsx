@@ -2,10 +2,10 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NativeBaseProvider} from 'native-base';
-import {Home} from './components/Home/Home';
-import {AddingForm} from './components/AddingForm/AddingForm';
-import {PathsList} from './components/PathsList/PathsList';
-import {ObservablePaths, paths} from './ObservablePaths';
+import {Home} from './src/components/Home/Home';
+import {AddingForm} from './src/components/AddingForm/AddingForm';
+import {PathsList} from './src/components/PathsList/PathsList';
+import {ObservablePaths, paths} from './src/Context';
 
 const Stack = createNativeStackNavigator();
 

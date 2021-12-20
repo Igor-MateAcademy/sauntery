@@ -12,15 +12,17 @@ import {
   HStack,
 } from 'native-base';
 import {FormData} from '../../types/FormData';
-import {ObservablePaths} from '../../ObservablePaths';
+import {ObservablePaths, ObservableMarkers} from '../../Context';
 import {observer} from 'mobx-react-lite';
 
-export const AddingForm = observer(({navigation}: any) => {
-  const observablePaths = useContext(ObservablePaths);
+export const AddingForm = observer(({navigation, route}: any) => {
+  const paths = useContext(ObservablePaths);
+  const marker = useContext(ObservableMarkers);
   const [formData, setFormData] = useState<FormData>({
     title: '',
     shortDescription: '',
     fullDescription: '',
+    points: [],
   });
 
   const goHome = () => {
@@ -29,11 +31,15 @@ export const AddingForm = observer(({navigation}: any) => {
 
   const submitForm = () => {
     if (validateData()) {
-      observablePaths.addPath({
+      paths.addPath({
         ...formData,
         id: uuid.v1(),
         isFavorite: false,
+        points: [...route.params.points],
+        region: {...route.params.region},
       });
+
+      marker.deleteAllMarkers();
       goHome();
     }
 
@@ -41,6 +47,7 @@ export const AddingForm = observer(({navigation}: any) => {
       title: '',
       shortDescription: '',
       fullDescription: '',
+      points: [],
     });
   };
 

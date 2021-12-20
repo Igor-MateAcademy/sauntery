@@ -26,7 +26,11 @@ export class Paths {
       deepClone.isFavorite = !deepClone.isFavorite;
       pathsWithoutFavorite.push(deepClone);
       this.paths = pathsWithoutFavorite;
-      this.paths.sort((a: any, b: any) => b.isFavorite - a.isFavorite);
+      this.paths.sort(
+        (a: Path, b: Path) => Number(b.isFavorite) - Number(a.isFavorite),
+      );
     }
   };
+
+  getPaths = () => this.paths;
 }

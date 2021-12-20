@@ -1,4 +1,3 @@
-// Context for all app's pages
 import React from 'react';
 import {Paths} from './stores/paths';
 import {Markers} from './stores/markers';
