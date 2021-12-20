@@ -12,6 +12,7 @@ type Marker = {
 
 export class Markers {
   markers: any[] = [];
+  geolocation: any = {};
 
   constructor() {
     makeAutoObservable(this);

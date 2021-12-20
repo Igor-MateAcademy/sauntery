@@ -104,26 +104,25 @@ export const Map = observer(() => {
     });
   };
 
-  // implement zooming function
-  // eslint-disable-next-line
-  const zooming = (option: string): void => {};
-
   const clearAllMarkers = (): void => {
     marker.deleteAllMarkers();
     setIsDirection(false);
   };
 
   const getFirstWaypoint = () => {
-    const waypoint = marker.getMarkers()[0];
-    console.log('first', waypoint);
+    if (marker.getMarkers().length > 1) {
+      const waypoint = marker.getMarkers()[0];
 
-    return waypoint.coordinate;
+      return waypoint.coordinate;
+    }
   };
 
   const getLastWaypoint = () => {
-    const waypoint = marker.getMarkers()[marker.getMarkers().length - 1];
+    if (marker.getMarkers().length > 1) {
+      const waypoint = marker.getMarkers()[marker.getMarkers().length - 1];
 
-    return waypoint.coordinate;
+      return waypoint.coordinate;
+    }
   };
 
   const handleRenderingDirection = () => {
@@ -143,8 +142,10 @@ export const Map = observer(() => {
 
   return (
     <Box style={styles.map__container}>
-      {console.log('Map was re-rendered')}
       <MapView
+        loadingIndicatorColor="#1e9bf9"
+        loadingEnabled={true}
+        showsUserLocation={true}
         ref={(ref: any) => {
           map.current = ref;
         }}
@@ -177,15 +178,7 @@ export const Map = observer(() => {
           onPress={moveToGeolocation}
         />
       </Flex>
-      <Flex style={styles.zoom}>
-        <IconButton
-          icon={<Icon name="circle-with-plus" size={30} color="#1e9bf9" />}
-          // onPress={zooming('increase')}
-        />
-        <IconButton
-          icon={<Icon name="circle-with-minus" size={30} color="#1e9bf9" />}
-          // onPress={zooming('decrease')}
-        />
+      <Flex style={styles.trash}>
         <IconButton
           icon={<Icon name="trash" size={30} color="#1e9bf9" />}
           onPress={clearAllMarkers}
@@ -199,7 +192,6 @@ const styles = StyleSheet.create({
   map__container: {
     position: 'relative',
     height: '72%',
-    backgroundColor: 'yellow',
     overflow: 'hidden',
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4,
@@ -224,7 +216,7 @@ const styles = StyleSheet.create({
     left: '50%',
   },
 
-  zoom: {
+  trash: {
     position: 'absolute',
   },
 });

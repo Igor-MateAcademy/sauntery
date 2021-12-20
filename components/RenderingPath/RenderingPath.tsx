@@ -74,6 +74,7 @@ export const RenderingPath: React.FC<any> = observer(({path}) => {
               <Text style={styles.path__description}>
                 {path.fullDescription}
               </Text>
+              <Divider style={styles.modal__divider} />
             </Modal.Body>
           </Modal.Content>
         </Modal>
