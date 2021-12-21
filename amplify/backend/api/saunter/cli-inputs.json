@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "saunter",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/mac/Documents/Projects/Igor/saunter/amplify/backend/api/saunter/schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 7
+    }
+  }
+}
