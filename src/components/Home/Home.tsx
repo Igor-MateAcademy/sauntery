@@ -12,7 +12,7 @@ import {
   IconButton,
 } from 'native-base';
 import {StyleSheet} from 'react-native';
-import {ObservableMarkers} from '../../Context';
+import {ObservableMarkers, ObservablePaths} from '../../Context';
 import {observer} from 'mobx-react-lite';
 import Geolocation from '@react-native-community/geolocation';
 import MapView, {MapEvent, Marker} from 'react-native-maps';
@@ -25,6 +25,7 @@ const API_KEY = 'AIzaSyBtTK6KMu2bzUP3l80MhMdkPmsQF_6Zg7M';
 
 export const Home = observer(({navigation}: any) => {
   const marker = useContext(ObservableMarkers);
+  const paths = useContext(ObservablePaths);
   const map = useRef<MapView>();
 
   const navigateToForm = () => {
@@ -81,6 +82,7 @@ export const Home = observer(({navigation}: any) => {
 
   useEffect(() => {
     Geolocation.getCurrentPosition(success, error, options);
+    paths.setPathsFromDataStore();
   }, []);
 
   const [region, setRegion] = useState<Region>({

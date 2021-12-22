@@ -1,5 +1,4 @@
 import React, {useState, useContext} from 'react';
-import uuid from 'react-native-uuid';
 import {StyleSheet} from 'react-native';
 import {
   FormControl,
@@ -15,9 +14,6 @@ import {FormData} from '../../types/FormData';
 import {ObservablePaths, ObservableMarkers} from '../../Context';
 import {observer} from 'mobx-react-lite';
 
-import Amplify, {DataStore} from 'aws-amplify';
-import {Todo} from '../../models';
-
 export const AddingForm = observer(({navigation, route}: any) => {
   const paths = useContext(ObservablePaths);
   const marker = useContext(ObservableMarkers);
@@ -32,28 +28,14 @@ export const AddingForm = observer(({navigation, route}: any) => {
     navigation.navigate('Home');
   };
 
-  const submitForm = () => {
+  const submitForm = async () => {
     if (validateData()) {
       paths.addPath({
         ...formData,
-        id: uuid.v1(),
         isFavorite: false,
         points: [...route.params.points],
         region: {...route.params.region},
       });
-
-      try {
-        DataStore.save(
-          new Todo({
-            id: String(uuid.v1()),
-            name: 'Aboba',
-            description: 'Test description',
-          }),
-        );
-        console.log('Aboooba');
-      } catch (error) {
-        console.log('Catched error:', error);
-      }
 
       marker.deleteAllMarkers();
       goHome();

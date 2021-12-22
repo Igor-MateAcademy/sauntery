@@ -1,7 +1,8 @@
 import {LatLng} from './LatLng';
 import {Region} from './Region';
+
 export interface Path {
-  id: string | Uint8Array;
+  id?: string;
   title: string;
   shortDescription: string;
   fullDescription: string;

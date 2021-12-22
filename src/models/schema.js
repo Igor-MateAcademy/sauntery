@@ -1,7 +1,7 @@
 export const schema = {
     "models": {
-        "Todo": {
-            "name": "Todo",
+        "PathsData": {
+            "name": "PathsData",
             "fields": {
                 "id": {
                     "name": "id",
@@ -10,18 +10,46 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "name": {
-                    "name": "name",
+                "title": {
+                    "name": "title",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
                     "attributes": []
                 },
-                "description": {
-                    "name": "description",
+                "shortDescription": {
+                    "name": "shortDescription",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "fullDescription": {
+                    "name": "fullDescription",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "isFavorite": {
+                    "name": "isFavorite",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "points": {
+                    "name": "points",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "region": {
+                    "name": "region",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": true,
                     "attributes": []
                 },
                 "createdAt": {
@@ -42,7 +70,7 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "Todos",
+            "pluralName": "PathsData",
             "attributes": [
                 {
                     "type": "model",
@@ -53,5 +81,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "4401034582a70c60713e1f7f9da3b752"
+    "version": "dd7c1a6404fef5e88b95578ca4a6995a"
 };

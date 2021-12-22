@@ -1,7 +1,7 @@
-import _ from 'lodash';
 import {makeAutoObservable} from 'mobx';
 import {Path} from '../types/Path';
-
+import {DataStore, Predicates} from 'aws-amplify';
+import {PathsData} from '../models';
 export class Paths {
   paths: Path[] = [];
 
@@ -9,28 +9,94 @@ export class Paths {
     makeAutoObservable(this);
   }
 
-  addPath = (path: Path): void => {
-    this.paths.push(path);
-  };
+  addPath = async (path: Path) => {
+    await DataStore.save(
+      new PathsData({
+        title: path.title,
+        shortDescription: path.shortDescription,
+        fullDescription: path.fullDescription,
+        isFavorite: path.isFavorite,
+        points: JSON.stringify(path.points),
+        region: JSON.stringify(path.region),
+      }),
+    );
 
-  deletePath = (id: string | Uint8Array): void => {
-    this.paths = this.paths.filter(path => id != path.id);
-  };
+    const dataFromDataStore = await this.getPathsFromDataStore();
+    if (dataFromDataStore) {
+      const lastItem = dataFromDataStore[dataFromDataStore.length - 1];
 
-  sortByFavorite = (id: string | Uint8Array) => {
-    const pathsWithoutFavorite = this.paths.filter(path => id !== path.id);
-    const favoritePath = this.paths.find(path => path.id === id);
-    const deepClone = _.cloneDeep(favoritePath);
-
-    if (deepClone) {
-      deepClone.isFavorite = !deepClone.isFavorite;
-      pathsWithoutFavorite.push(deepClone);
-      this.paths = pathsWithoutFavorite;
-      this.paths.sort(
-        (a: Path, b: Path) => Number(b.isFavorite) - Number(a.isFavorite),
-      );
+      this.paths.push({
+        id: lastItem.id,
+        ...path,
+      });
+    } else {
+      console.log('Data from storage is invalid');
     }
   };
 
-  getPaths = () => this.paths;
+  deletePath = async (id: string) => {
+    await DataStore.delete(PathsData, id);
+
+    this.setPathsFromDataStore();
+  };
+
+  sortByFavorite = () => {
+    this.paths.sort(
+      (a: Path, b: Path) => Number(b.isFavorite) - Number(a.isFavorite),
+    );
+  };
+
+  getPaths = () =>
+    this.paths.sort(
+      (a: Path, b: Path) => Number(b.isFavorite) - Number(a.isFavorite),
+    );
+
+  getPathsFromDataStore = async () => {
+    try {
+      const fromDataStore = await DataStore.query(PathsData);
+
+      return fromDataStore;
+    } catch (error) {
+      console.log(error);
+
+      return null;
+    }
+  };
+
+  setPathsFromDataStore = async () => {
+    const downloadedData = await this.getPathsFromDataStore();
+
+    this.paths = downloadedData as unknown as Path[];
+  };
+
+  updatePathsFromDataStore = async (id: string) => {
+    const originalPath = await DataStore.query(PathsData, id);
+    console.log('originalPath', originalPath);
+
+    if (originalPath) {
+      await DataStore.save(
+        PathsData.copyOf(originalPath, updatedPath => {
+          updatedPath.isFavorite = !originalPath.isFavorite;
+        }),
+      );
+    }
+
+    await this.setPathsFromDataStore();
+  };
+
+  ////* Utility methods *////
+
+  showDataStore = async () => {
+    try {
+      const dataFromDataStore = await DataStore.query(PathsData);
+
+      console.log('Data from storage', dataFromDataStore);
+    } catch (error) {
+      console.log('Error from showDataStore', error);
+    }
+  };
+
+  clearDataStore = async () => {
+    await DataStore.delete(PathsData, Predicates.ALL);
+  };
 }

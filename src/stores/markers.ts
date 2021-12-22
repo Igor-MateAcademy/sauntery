@@ -1,5 +1,6 @@
 import {makeAutoObservable} from 'mobx';
 import {Waypoint} from '../types/Waypoint';
+
 export class Markers {
   markers: Waypoint[] = [];
 

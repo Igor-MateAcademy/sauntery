@@ -5,9 +5,10 @@ import {
   Text,
   Flex,
   IconButton,
-  Modal,
   Divider,
+  ScrollView,
 } from 'native-base';
+import Modal from 'react-native-modal';
 import {StyleSheet} from 'react-native';
 import {ObservablePaths} from '../../Context';
 import {observer} from 'mobx-react-lite';
@@ -31,7 +32,8 @@ export const RenderingPath: React.FC<any> = observer(({path}) => {
   };
 
   const setAsFavorite = () => {
-    paths.sortByFavorite(path.id);
+    paths.updatePathsFromDataStore(path.id);
+    paths.sortByFavorite();
   };
 
   const getFirstWaypoint = () => path.points[0].coordinate;
@@ -50,6 +52,10 @@ export const RenderingPath: React.FC<any> = observer(({path}) => {
 
   const getDistance = (result: any) => {
     setDistanceBetweenMarkers(result.distance);
+  };
+
+  const closeModalHandler = () => {
+    setIsModalVisible(false);
   };
 
   return (
@@ -80,49 +86,52 @@ export const RenderingPath: React.FC<any> = observer(({path}) => {
           onPress={getPathInfo}
         />
         <Modal
-          size="100%"
-          isOpen={isModalVisible}
-          onClose={() => {
-            setIsModalVisible(false);
-          }}>
-          <Modal.Content>
-            <Modal.CloseButton />
-            <Modal.Header>{path.title}</Modal.Header>
-            <Modal.Body>
-              <Heading style={styles.modal__header}>Short description</Heading>
-              <Text style={styles.path__description}>
-                {path.shortDescription}
-              </Text>
-              <Divider style={styles.modal__divider} />
-              <Heading style={styles.modal__header}>Full description</Heading>
-              <Text style={styles.path__description}>
-                {path.fullDescription}
-              </Text>
-              <Divider style={styles.modal__divider} />
-              <MapView
-                showsUserLocation={true}
-                style={styles.map}
-                region={path.region}>
-                {path.points.map((marker: any) => (
-                  <Marker coordinate={{...marker.coordinate}} key={marker.id} />
-                ))}
-                <MapViewDirections
-                  origin={getFirstWaypoint()}
-                  waypoints={getWaypoints()}
-                  destination={getLastWaypoint()}
-                  apikey={API_KEY}
-                  strokeWidth={3}
-                  strokeColor="hotpink"
-                  mode="WALKING"
-                  onReady={getDistance}
-                />
-              </MapView>
-              <Heading
-                style={
-                  styles.distance
-                }>{`Distance: ${distanceBetweenMarkers} km`}</Heading>
-            </Modal.Body>
-          </Modal.Content>
+          propagateSwipe
+          isVisible={isModalVisible}
+          style={styles.modal}
+          animationIn="zoomIn"
+          animationInTiming={600}
+          animationOut="zoomOut"
+          animationOutTiming={600}>
+          <ScrollView>
+            <Flex style={styles.modal__nav}>
+              <Heading style={styles.modal__title}>{path.title}</Heading>
+              <IconButton
+                icon={<Icon name="cross" size={30} />}
+                onPress={closeModalHandler}
+              />
+            </Flex>
+            <Heading style={styles.modal__header}>Short description</Heading>
+            <Text style={styles.path__description}>
+              {path.shortDescription}
+            </Text>
+            <Divider style={styles.modal__divider} />
+            <Heading style={styles.modal__header}>Full description</Heading>
+            <Text style={styles.path__description}>{path.fullDescription}</Text>
+            <Divider style={styles.modal__divider} />
+            <MapView
+              showsUserLocation={true}
+              style={styles.map}
+              region={path.region}>
+              {path.points.map((marker: any) => (
+                <Marker coordinate={{...marker.coordinate}} key={marker.id} />
+              ))}
+              <MapViewDirections
+                origin={getFirstWaypoint()}
+                waypoints={getWaypoints()}
+                destination={getLastWaypoint()}
+                apikey={API_KEY}
+                strokeWidth={3}
+                strokeColor="hotpink"
+                mode="WALKING"
+                onReady={getDistance}
+              />
+            </MapView>
+            <Heading
+              style={
+                styles.distance
+              }>{`Distance: ${distanceBetweenMarkers} km`}</Heading>
+          </ScrollView>
         </Modal>
       </Box>
     </Flex>
@@ -151,13 +160,25 @@ const styles = StyleSheet.create({
   },
 
   modal: {
-    flex: 1,
+    marginVertical: 60,
+    padding: 20,
+    borderRadius: 24,
+    backgroundColor: '#fff',
+  },
+
+  modal__nav: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'center',
+    marginBottom: 16,
   },
 
   modal__divider: {
     marginVertical: 12,
+  },
+
+  modal__title: {
+    textTransform: 'uppercase',
   },
 
   modal__header: {
@@ -167,7 +188,8 @@ const styles = StyleSheet.create({
   map: {
     marginBottom: 8,
     height: '100%',
-    width: 350,
+    width: '100%',
+    borderRadius: 8,
   },
 
   distance: {

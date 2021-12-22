@@ -2,43 +2,55 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createTodo = /* GraphQL */ `
-  mutation CreateTodo(
-    $input: CreateTodoInput!
-    $condition: ModelTodoConditionInput
+export const createPathsData = /* GraphQL */ `
+  mutation CreatePathsData(
+    $input: CreatePathsDataInput!
+    $condition: ModelPathsDataConditionInput
   ) {
-    createTodo(input: $input, condition: $condition) {
+    createPathsData(input: $input, condition: $condition) {
       id
-      name
-      description
+      title
+      shortDescription
+      fullDescription
+      isFavorite
+      points
+      region
       createdAt
       updatedAt
     }
   }
 `;
-export const updateTodo = /* GraphQL */ `
-  mutation UpdateTodo(
-    $input: UpdateTodoInput!
-    $condition: ModelTodoConditionInput
+export const updatePathsData = /* GraphQL */ `
+  mutation UpdatePathsData(
+    $input: UpdatePathsDataInput!
+    $condition: ModelPathsDataConditionInput
   ) {
-    updateTodo(input: $input, condition: $condition) {
+    updatePathsData(input: $input, condition: $condition) {
       id
-      name
-      description
+      title
+      shortDescription
+      fullDescription
+      isFavorite
+      points
+      region
       createdAt
       updatedAt
     }
   }
 `;
-export const deleteTodo = /* GraphQL */ `
-  mutation DeleteTodo(
-    $input: DeleteTodoInput!
-    $condition: ModelTodoConditionInput
+export const deletePathsData = /* GraphQL */ `
+  mutation DeletePathsData(
+    $input: DeletePathsDataInput!
+    $condition: ModelPathsDataConditionInput
   ) {
-    deleteTodo(input: $input, condition: $condition) {
+    deletePathsData(input: $input, condition: $condition) {
       id
-      name
-      description
+      title
+      shortDescription
+      fullDescription
+      isFavorite
+      points
+      region
       createdAt
       updatedAt
     }
