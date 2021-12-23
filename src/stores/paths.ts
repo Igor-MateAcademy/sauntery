@@ -1,15 +1,23 @@
-import {makeAutoObservable} from 'mobx';
+import {makeObservable, observable, action, computed} from 'mobx';
 import {Path} from '../types/Path';
-import {DataStore, Predicates} from 'aws-amplify';
+import {DataStore} from 'aws-amplify';
 import {PathsData} from '../models';
 export class Paths {
   paths: Path[] = [];
 
   constructor() {
-    makeAutoObservable(this);
+    makeObservable(this, {
+      paths: observable,
+      deletePath: action,
+      getPaths: computed,
+      setPathsFromDataStore: action,
+      updatePathsFromDataStore: action,
+    });
   }
 
-  addPath = async (path: Path) => {
+  async addPath(path: Path) {
+    let dataFromDataStore;
+
     await DataStore.save(
       new PathsData({
         title: path.title,
@@ -21,7 +29,8 @@ export class Paths {
       }),
     );
 
-    const dataFromDataStore = await this.getPathsFromDataStore();
+    dataFromDataStore = await this.getPathsFromDataStore();
+
     if (dataFromDataStore) {
       const lastItem = dataFromDataStore[dataFromDataStore.length - 1];
 
@@ -32,23 +41,19 @@ export class Paths {
     } else {
       console.log('Data from storage is invalid');
     }
-  };
+  }
 
-  deletePath = async (id: string) => {
+  async deletePath(id: string) {
     await DataStore.delete(PathsData, id);
 
-    this.setPathsFromDataStore();
-  };
+    await this.setPathsFromDataStore();
+  }
 
-  sortByFavorite = () => {
-    this.paths.sort(
-      (a: Path, b: Path) => Number(b.isFavorite) - Number(a.isFavorite),
-    );
-  };
+  get getPaths() {
+    return this.paths;
+  }
 
-  getPaths = () => this.paths;
-
-  getPathsFromDataStore = async () => {
+  private async getPathsFromDataStore() {
     try {
       const fromDataStore = await DataStore.query(PathsData);
 
@@ -58,9 +63,9 @@ export class Paths {
 
       return null;
     }
-  };
+  }
 
-  setPathsFromDataStore = async () => {
+  async setPathsFromDataStore() {
     const downloadedData = await this.getPathsFromDataStore();
 
     if (downloadedData) {
@@ -71,9 +76,9 @@ export class Paths {
     }
 
     this.paths = downloadedData as unknown as Path[];
-  };
+  }
 
-  updatePathsFromDataStore = async (id: string) => {
+  async updatePathsFromDataStore(id: string) {
     const originalPath = await DataStore.query(PathsData, id);
 
     if (originalPath) {
@@ -85,21 +90,5 @@ export class Paths {
     }
 
     await this.setPathsFromDataStore();
-  };
-
-  ////* Utility methods *////
-
-  showDataStore = async () => {
-    try {
-      const dataFromDataStore = await DataStore.query(PathsData);
-
-      console.log('Data from storage', dataFromDataStore);
-    } catch (error) {
-      console.log('Error from showDataStore', error);
-    }
-  };
-
-  clearDataStore = async () => {
-    await DataStore.delete(PathsData, Predicates.ALL);
-  };
+  }
 }

@@ -13,7 +13,7 @@ export const PathsList = observer(() => {
 
   return (
     <FlatList
-      data={paths.getPaths()}
+      data={paths.getPaths}
       renderItem={renderItemHandler}
       keyExtractor={keyHandler}
     />

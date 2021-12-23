@@ -85,6 +85,10 @@ export const AddingForm = observer(({navigation, route}: any) => {
 
   return (
     <FormControl style={styles.form} isRequired>
+      {
+        //////////////////////////
+        console.log('Component AddingForm was re-rendered')
+      }
       <Flex style={styles.container}>
         <Flex>
           <FormControl.Label>

@@ -23,6 +23,14 @@ import {Region} from '../../types/Region';
 import {GOOGLE_API_KEY} from '@env';
 
 export const Home = observer(({navigation}: any) => {
+  useEffect(() => {
+    Geolocation.getCurrentPosition(success, error, options);
+    paths.setPathsFromDataStore();
+
+    /////////////////////////////
+    console.log('Home component was mounted');
+  }, []);
+
   const marker = useContext(ObservableMarkers);
   const paths = useContext(ObservablePaths);
   const map = useRef<MapView>();
@@ -78,11 +86,6 @@ export const Home = observer(({navigation}: any) => {
       error: error.message,
     });
   };
-
-  useEffect(() => {
-    Geolocation.getCurrentPosition(success, error, options);
-    paths.setPathsFromDataStore();
-  }, []);
 
   const [region, setRegion] = useState<Region>({
     latitude: 0,
@@ -167,6 +170,10 @@ export const Home = observer(({navigation}: any) => {
 
   return (
     <Box style={styles.page}>
+      {
+        /////////////////////////
+        console.log('Component Home was re-rendered')
+      }
       <Heading style={styles.page__title}>Saunter</Heading>
       <Divider style={styles.divider} />
       <Flex style={styles.nav}>

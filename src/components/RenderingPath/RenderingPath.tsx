@@ -58,6 +58,10 @@ export const RenderingPath: React.FC<any> = observer(({path}) => {
 
   return (
     <Flex style={styles.path}>
+      {
+        ////////////////////////////
+        console.log('Component RenderingPath was re-rendered')
+      }
       <Flex style={styles.path__info}>
         <Heading>{path.title}</Heading>
         <Text style={styles.path__description} isTruncated maxWidth="90%">
