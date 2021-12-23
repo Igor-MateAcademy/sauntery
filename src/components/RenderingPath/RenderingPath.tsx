@@ -33,7 +33,6 @@ export const RenderingPath: React.FC<any> = observer(({path}) => {
 
   const setAsFavorite = () => {
     paths.updatePathsFromDataStore(path.id);
-    paths.sortByFavorite();
   };
 
   const getFirstWaypoint = () => path.points[0].coordinate;

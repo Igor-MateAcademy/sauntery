@@ -46,10 +46,7 @@ export class Paths {
     );
   };
 
-  getPaths = () =>
-    this.paths.sort(
-      (a: Path, b: Path) => Number(b.isFavorite) - Number(a.isFavorite),
-    );
+  getPaths = () => this.paths;
 
   getPathsFromDataStore = async () => {
     try {
@@ -66,12 +63,18 @@ export class Paths {
   setPathsFromDataStore = async () => {
     const downloadedData = await this.getPathsFromDataStore();
 
+    if (downloadedData) {
+      downloadedData.sort(
+        (a: PathsData, b: PathsData) =>
+          Number(b.isFavorite) - Number(a.isFavorite),
+      );
+    }
+
     this.paths = downloadedData as unknown as Path[];
   };
 
   updatePathsFromDataStore = async (id: string) => {
     const originalPath = await DataStore.query(PathsData, id);
-    console.log('originalPath', originalPath);
 
     if (originalPath) {
       await DataStore.save(
