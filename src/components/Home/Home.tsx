@@ -34,6 +34,7 @@ export const Home = observer(({navigation}: any) => {
   const marker = useContext(ObservableMarkers);
   const paths = useContext(ObservablePaths);
   const map = useRef<MapView>();
+  const [isLightMapTheme, setIsLightMapTheme] = useState(true);
 
   const navigateToForm = () => {
     if (marker.isMarkersCountValid) {
@@ -55,8 +56,6 @@ export const Home = observer(({navigation}: any) => {
     longitudeDelta: 0.002,
     error: '',
   });
-
-  const [isDirection, setIsDirection] = useState(true);
 
   const options = {
     enableHighAccuracy: true,
@@ -134,7 +133,6 @@ export const Home = observer(({navigation}: any) => {
 
   const clearAllMarkers = (): void => {
     marker.deleteAllMarkers();
-    setIsDirection(false);
   };
 
   const getFirstWaypoint = () => {
@@ -153,10 +151,6 @@ export const Home = observer(({navigation}: any) => {
     }
   };
 
-  const handleRenderingDirection = () => {
-    setIsDirection(!isDirection);
-  };
-
   const getWaypoints = () => {
     const markers = marker.getMarkers;
     const slicedMarkers = markers.slice(1, -1);
@@ -166,6 +160,10 @@ export const Home = observer(({navigation}: any) => {
     }
 
     return slicedMarkers.map(way => way.coordinate);
+  };
+
+  const changeTheme = () => {
+    setIsLightMapTheme(!isLightMapTheme);
   };
 
   return (
@@ -204,6 +202,7 @@ export const Home = observer(({navigation}: any) => {
       )}
       <Box style={styles.map__container}>
         <MapView
+          userInterfaceStyle={isLightMapTheme ? 'light' : 'dark'}
           showsUserLocation={true}
           ref={(ref: any) => {
             map.current = ref;
@@ -218,26 +217,30 @@ export const Home = observer(({navigation}: any) => {
               key={currMarker.id}
             />
           ))}
-          {isDirection && (
-            <MapViewDirections
-              origin={getFirstWaypoint()}
-              waypoints={getWaypoints()}
-              destination={getLastWaypoint()}
-              apikey={GOOGLE_API_KEY}
-              strokeWidth={3}
-              strokeColor="hotpink"
-              mode="WALKING"
-            />
-          )}
+          <MapViewDirections
+            origin={getFirstWaypoint()}
+            waypoints={getWaypoints()}
+            destination={getLastWaypoint()}
+            apikey={GOOGLE_API_KEY}
+            strokeWidth={3}
+            strokeColor="hotpink"
+            mode="WALKING"
+          />
         </MapView>
         <Flex style={styles.man}>
           <IconButton
-            icon={<Icon name="direction" size={30} color="#1e9bf9" />}
-            onPress={handleRenderingDirection}
-          />
-          <IconButton
             icon={<Icon name="man" size={30} color="#1e9bf9" />}
             onPress={moveToGeolocation}
+          />
+          <IconButton
+            icon={
+              <Icon
+                name={isLightMapTheme ? 'light-up' : 'moon'}
+                size={30}
+                color="#1e9bf9"
+              />
+            }
+            onPress={changeTheme}
           />
         </Flex>
         <Flex style={styles.trash}>
