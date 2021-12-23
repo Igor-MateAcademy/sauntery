@@ -15,8 +15,7 @@ import {observer} from 'mobx-react-lite';
 import Icon from 'react-native-vector-icons/Entypo';
 import MapView, {Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
-
-const API_KEY = 'AIzaSyBtTK6KMu2bzUP3l80MhMdkPmsQF_6Zg7M';
+import {GOOGLE_API_KEY} from '@env';
 
 export const RenderingPath: React.FC<any> = observer(({path}) => {
   const paths = useContext(ObservablePaths);
@@ -119,7 +118,7 @@ export const RenderingPath: React.FC<any> = observer(({path}) => {
                 origin={getFirstWaypoint()}
                 waypoints={getWaypoints()}
                 destination={getLastWaypoint()}
-                apikey={API_KEY}
+                apikey={GOOGLE_API_KEY}
                 strokeWidth={3}
                 strokeColor="hotpink"
                 mode="WALKING"
