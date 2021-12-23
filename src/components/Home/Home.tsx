@@ -36,9 +36,9 @@ export const Home = observer(({navigation}: any) => {
   const map = useRef<MapView>();
 
   const navigateToForm = () => {
-    if (marker.isMarkersCountValid()) {
+    if (marker.isMarkersCountValid) {
       navigation.navigate('Form', {
-        points: [...marker.getMarkers()],
+        points: [...marker.getMarkers],
         region: {...region},
       });
     }
@@ -138,16 +138,16 @@ export const Home = observer(({navigation}: any) => {
   };
 
   const getFirstWaypoint = () => {
-    if (marker.getMarkers().length > 1) {
-      const waypoint = marker.getMarkers()[0];
+    if (marker.getMarkers.length > 1) {
+      const waypoint = marker.getMarkers[0];
 
       return waypoint.coordinate;
     }
   };
 
   const getLastWaypoint = () => {
-    if (marker.getMarkers().length > 1) {
-      const waypoint = marker.getMarkers()[marker.getMarkers().length - 1];
+    if (marker.getMarkers.length > 1) {
+      const waypoint = marker.getMarkers[marker.getMarkers.length - 1];
 
       return waypoint.coordinate;
     }
@@ -158,7 +158,7 @@ export const Home = observer(({navigation}: any) => {
   };
 
   const getWaypoints = () => {
-    const markers = marker.getMarkers();
+    const markers = marker.getMarkers;
     const slicedMarkers = markers.slice(1, -1);
 
     if (markers.length < 1) {
@@ -185,7 +185,7 @@ export const Home = observer(({navigation}: any) => {
         </Button>
       </Flex>
       <Divider style={styles.divider} />
-      {!marker.isMarkersCountValid() ? (
+      {!marker.isMarkersCountValid ? (
         <Alert status="info" variant="outline" style={styles.alert}>
           <HStack space={3} alignItems="center">
             <Alert.Icon />

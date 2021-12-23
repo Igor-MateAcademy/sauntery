@@ -1,26 +1,34 @@
-import {makeAutoObservable} from 'mobx';
+import {makeObservable, observable, action, computed} from 'mobx';
 import {Waypoint} from '../types/Waypoint';
 
 export class Markers {
   markers: Waypoint[] = [];
 
   constructor() {
-    makeAutoObservable(this);
+    makeObservable(this, {
+      markers: observable,
+      addMarker: action,
+      deleteAllMarkers: action,
+      isMarkersCountValid: computed,
+      getMarkers: computed,
+    });
   }
 
-  addMarker = (marker: Waypoint): void => {
+  addMarker(marker: Waypoint) {
     this.markers.push(marker);
-  };
+  }
 
-  isMarkersCountValid = () => {
-    const count = this.markers.length;
+  get isMarkersCountValid() {
+    const length = this.markers.length;
 
-    return count > 1 && count <= 10;
-  };
+    return length > 1 && length <= 10;
+  }
 
-  deleteAllMarkers = (): void => {
+  deleteAllMarkers() {
     this.markers = [];
-  };
+  }
 
-  getMarkers = () => this.markers;
+  get getMarkers() {
+    return this.markers;
+  }
 }
